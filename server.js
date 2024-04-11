@@ -14,7 +14,7 @@ const app = express();
 //   ];
 // Define the port your server will listen on
 const PORT = process.env.PORT || 3000;
-app.get("/", (req, res) => res.type('html').send(html));
+app.get("/", (req, res) => res.type('html').send(html),cors());
 // Define a route to serve the static file
 app.use(express.static(path.join(__dirname, 'public')));
 
