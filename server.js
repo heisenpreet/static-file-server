@@ -13,10 +13,16 @@ const app = express();
 //     "https://seller.gowholsale.com", // seller prod
 //   ];
 // Define the port your server will listen on
+
+// const corsOptions ={
+//   origin:'*', 
+//   credentials:true,            //access-control-allow-credentials:true
+//   optionSuccessStatus:200,
+// }
 const PORT = process.env.PORT || 3000;
-app.get("/", (req, res) => res.type('html').send(html),cors());
+app.use(cors(),express.static(path.join(__dirname, 'public')));
+app.get("/", (req, res) => res.type('html').send(html));
 // Define a route to serve the static file
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Start the server
 app.listen(PORT, () => {
