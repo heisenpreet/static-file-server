@@ -36,11 +36,11 @@ app.post("/api/postData", async (req, res) => {
   // res.set({ 'Content-Type': 'application/pdf', 'Content-Length': pdfBuffer.length })
   // res.send(pdfBuffer)
   // Convert PDF buffer to Blob
-  const pdfBlob = Buffer.from(pdfBuffer, "binary");
+  const pdfBlob = Buffer.from(pdfBuffer);
 
   // Set response headers
   res.set({
-    "Content-Type": "application.octet-stream",
+    "Content-Type": "application/octet-stream",
     "Content-Disposition": 'attachment; filename="output.pdf"',
   });
 
