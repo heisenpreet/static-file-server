@@ -1,27 +1,45 @@
 // Import necessary modules
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 const cors = require("cors");
-// Create an instance of Express
+const puppeteer = require("puppeteer");
+const fs = require("fs");
 const app = express();
-// const authorize = [
-//     "http://localhost:3000", // local server
-//     "http://localhost:3001", //local server
-//     "https://dev.seller.gowholsale.com", // stag seller
-//     "https://dev.buyer.gowholsale.com", // stag buyer
-//     "https://gowholsale.com", // buyer prod
-//     "https://seller.gowholsale.com", // seller prod
-//   ];
-// Define the port your server will listen on
+const bodyParser = require("body-parser");
 
-// const corsOptions ={
-//   origin:'*', 
-//   credentials:true,            //access-control-allow-credentials:true
-//   optionSuccessStatus:200,
-// }
+// Middleware to parse incoming request bodies
+app.use(bodyParser.json());
+app.use(bodyParser.text({ type: "text/html" }));
+app.use(cors(), express.static(path.join(__dirname, "public")));
+app.get("/", (req, res) => res.type("html").send(html));
+// POST endpoint
+app.post("/api/postData", async (req, res) => {
+  const postData = req.body;
+  const browser = await puppeteer.launch({
+    headless: true,
+  });
+
+  // create a new page
+  const page = await browser.newPage();
+
+  // set your html as the pages content
+  await page.setContent(postData, {
+    waitUntil: "domcontentloaded",
+  });
+
+  // create a pdf buffer
+  const pdfBuffer = await page.pdf({
+    format: "A4",
+  });
+  
+  await browser.close();
+	res.set({ 'Content-Type': 'application/pdf', 'Content-Length': pdfBuffer.length })
+	res.send(pdfBuffer)
+
+});
+
 const PORT = process.env.PORT || 3000;
-app.use(cors(),express.static(path.join(__dirname, 'public')));
-app.get("/", (req, res) => res.type('html').send(html));
+
 // Define a route to serve the static file
 
 // Start the server
@@ -78,4 +96,4 @@ const html = `
     </section>
   </body>
 </html>
-`
+`;
