@@ -31,11 +31,21 @@ app.post("/api/postData", async (req, res) => {
   const pdfBuffer = await page.pdf({
     format: "A4",
   });
-  
-  await browser.close();
-	res.set({ 'Content-Type': 'application/pdf', 'Content-Length': pdfBuffer.length })
-	res.send(pdfBuffer)
 
+  await browser.close();
+  // res.set({ 'Content-Type': 'application/pdf', 'Content-Length': pdfBuffer.length })
+  // res.send(pdfBuffer)
+  // Convert PDF buffer to Blob
+  const pdfBlob = Buffer.from(pdfBuffer, "binary");
+
+  // Set response headers
+  res.set({
+    "Content-Type": "application/pdf",
+    "Content-Disposition": 'attachment; filename="output.pdf"',
+  });
+
+  // Send PDF Blob as response
+  res.send(pdfBlob);
 });
 
 const PORT = process.env.PORT || 3000;
