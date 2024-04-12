@@ -40,7 +40,7 @@ app.post("/api/postData", async (req, res) => {
 
   // Set response headers
   res.set({
-    "Content-Type": "application/octet-stream",
+    "Content-Type": "application/pdf",
     "Content-Disposition": 'attachment; filename="output.pdf"',
   });
 
