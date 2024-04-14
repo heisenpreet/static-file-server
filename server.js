@@ -21,7 +21,7 @@ let corsOptions = {
 app.use(cors(corsOptions), express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => res.type("html").send(html));
 // POST endpoint
-app.post("/render", async (req, res) => {
+app.post("/render", cors(corsOptions), async (req, res) => {
   const postData = req.body;
   const browser = await puppeteer.launch({
     headless: true,
