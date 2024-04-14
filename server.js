@@ -12,7 +12,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.text({ type: "text/html" }));
 // enabling CORS for some specific origins only.
 let corsOptions = {
-  origin: ["https://lender-dev.azurewebsites.net/"],
+  origin: [
+    "https://lender-dev.azurewebsites.net/",
+    "http://localhost:5173/",
+    "http://localhost:5174/",
+  ],
 };
 app.use(cors(corsOptions), express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => res.type("html").send(html));
