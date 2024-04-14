@@ -10,10 +10,14 @@ const bodyParser = require("body-parser");
 // Middleware to parse incoming request bodies
 app.use(bodyParser.json());
 app.use(bodyParser.text({ type: "text/html" }));
-app.use(cors(), express.static(path.join(__dirname, "public")));
+// enabling CORS for some specific origins only.
+let corsOptions = {
+  origin: ["https://lender-dev.azurewebsites.net/"],
+};
+app.use(cors(corsOptions), express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => res.type("html").send(html));
 // POST endpoint
-app.post("/api/postData", async (req, res) => {
+app.post("/render", async (req, res) => {
   const postData = req.body;
   const browser = await puppeteer.launch({
     headless: true,
@@ -30,6 +34,8 @@ app.post("/api/postData", async (req, res) => {
   // create a pdf buffer
   const pdfBuffer = await page.pdf({
     format: "A4",
+    printBackground: true,
+    margin: { bottom: 15, left: 15, top: 15, right: 15 },
   });
 
   await browser.close();
