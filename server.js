@@ -33,6 +33,7 @@ app.post("/render", cors(corsOptions), async (req, res) => {
   // set your html as the pages content
   await page.setContent(postData, {
     waitUntil: "domcontentloaded",
+    timeout: 0,
   });
 
   // create a pdf buffer
