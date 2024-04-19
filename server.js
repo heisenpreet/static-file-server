@@ -19,6 +19,7 @@ app.post("/render", cors(corsOptions), async (req, res) => {
   const postData = req.body;
   const browser = await puppeteer.launch({
     headless: true,
+    args: ["--disable-features=site-per-process"],
   });
 
   // create a new page
